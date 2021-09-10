@@ -189,9 +189,9 @@ checksum = "b71991ff56294aa922b450139ee08b3bfc70982c6b2c7562771375cf73542dd4"
 
 [[package]]
 name = "jq_lang"
-version = "0.1.0"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f3d1f6cfa0c06e378508d29c6aa954bdf27eb006a00fb55747ea36550d36addc"
+checksum = "380de709b568d80ca734d33635493715d8475e5eb7422008edbdffbd0ba6ccdb"
 
 [[package]]
 name = "lazy_static"
