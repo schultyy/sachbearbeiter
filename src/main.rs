@@ -1,9 +1,8 @@
-use jq_lang::to_ast;
+use jq_lang::{to_ast, node_type::NodeType};
 use clap::{AppSettings, Clap};
 use color_eyre::eyre::Result;
 use color_eyre::eyre::eyre;
 use std::io::{self, BufRead};
-use serde::Deserialize;
 use serde_json::Value;
 
 #[derive(Clap)]
@@ -32,10 +31,19 @@ fn parse_json(data: &str) -> serde_json::Result<Value> {
     Ok(value)
 }
 
-fn traverse_ast() -> serde_json::Result<String> {
-    let input_str = parse_json(&read_input_stream())?;
-    let json_str = serde_json::to_string(&input_str)?;
-    Ok(json_str)
+fn traverse_ast(ast: jq_lang::node::Node) -> serde_json::Result<String> {
+    let child_node = &ast.children.unwrap()[0];
+
+    match child_node.node_type {
+        NodeType::Identity => {
+            let input_str = parse_json(&read_input_stream())?;
+            let json_str = serde_json::to_string(&input_str)?;
+            Ok(json_str)
+        },
+        _ => {
+            Ok(String::new())
+        }
+    }
 }
 
 fn main() -> Result<()> {
@@ -44,7 +52,7 @@ fn main() -> Result<()> {
 
     match to_ast(&opts.filter) {
         Ok(ast) => {
-            match traverse_ast() {
+            match traverse_ast(ast) {
                 Ok(json) => {
                     println!("{}", json);
                     Ok(())
